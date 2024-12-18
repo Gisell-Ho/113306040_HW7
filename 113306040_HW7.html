@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework 7</title>
+    <link rel="stylesheet" href="113306040_HW5_CSS.css">
+    <style>
+        /* 基本樣式 */
+        #music-form {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #f9f9f9;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        #music-form input {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            padding: 8px;
+        }
+        #music-form button {
+            margin-right: 10px;
+            padding: 8px 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        
+        <div class="left-panel">
+            <div class="photo-panel"></div>
+            <div class="text-content">
+                <h2>About Me</h2>
+                <h1 id = "name-label">Giselle</h1>
+                <button id = "edit-button">Edit</button>
+                <p>Hello! I am Giselle. I am passionate about technology, design, and exploring creative solutions.</p>
+                <h3>Contact Info</h3>
+                <ul>
+                    <li>Email: 113306040@g.nccu.edu.tw</li>
+                    <li>Phone: 123-456-7890</li>
+                    <li>Social: 113306040@g.nccu.edu.tw</li>
+                </ul>
+                <img src="https://www.nccu.edu.tw/var/file/0/1000/img/logo_en.png" alt="NCCU Icon">
+            </div>
+        </div>
+
+       
+        <div class="right-panel">
+   
+            <section>
+                <h2>Education</h2>
+                <div class="timeline">
+                    <div><span class="year">2024</span> <span class="description">Graduated from TCGS</span></div>
+                    <div><span class="year">2024</span> <span class="description">Starting MIS at NCCU</span></div>
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Homework List</h2>
+                <ul>
+                    <li><a href="https://github.com/113306040/hw1" target="_blank">HW 1</a></li>
+                    <li><a href="https://github.com/113306040/hw2" target="_blank">HW 2</a></li>
+                    <li><a href="https://github.com/113306040/hw3" target="_blank">HW 3</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Favorite Music</h2>
+                <div id = "music-gallery" class="music-gallery">
+                    <a href="https://youtu.be/F4ELqraXx-U?feature=shared" target="_blank">
+                        <img src="https://static.wikia.nocookie.net/lanadelrey/images/a/a2/Lust_for_Life.jpg/revision/latest/scale-to-width-down/1000?cb=20211223115742" alt="Album 1">
+                    </a>
+                    <a href="https://youtu.be/f1r0XZLNlGQ?feature=shared" target="_blank">
+                        <img src="https://cdn-images.dzcdn.net/images/cover/cf979d162bdd9430a742be2ba588c7f6/500x500-000000-80-0-0.jpg" alt="Album 2">
+                    </a>
+                    <a href="https://youtu.be/tt2k8PGm-TI?feature=shared" target="_blank">
+                        <img src="https://cdn-images.dzcdn.net/images/cover/a16b3974bb938cf6fdd290ea8c60baf0/500x500-000000-80-0-0.jpg" alt="Album 3">
+                    </a>
+                </div>
+                <button id = "add-music-button">Add Music</button>
+                <p class="note">These are my favorite songs, each with a special memory. I hope you enjoy them as much as I do!</p>
+            </section>
+        </div>
+    </div>
+      <script>
+       
+        const editButton = document.getElementById('edit-button');
+        const nameLabel = document.getElementById('name-label');
+        let isEditing = false;
+
+        editButton.addEventListener('click', () => {
+            if (isEditing) {
+                const inputField = document.getElementById('name-input');
+                if (inputField) {
+                    nameLabel.textContent = inputField.value || "Unnamed"; 
+                    nameLabel.style.display = 'block';
+                    inputField.remove(); 
+                    editButton.textContent = 'Edit';
+                }
+            } else {
+                const inputField = document.createElement('input');
+                inputField.id = 'name-input';
+                inputField.type = 'text';
+                inputField.value = nameLabel.textContent;
+                nameLabel.style.display = 'none';
+                nameLabel.parentElement.insertBefore(inputField, editButton);
+                editButton.textContent = 'Save';
+            }
+            isEditing = !isEditing;
+        });
+
+         const addMusicButton = document.getElementById('add-music-button');
+        const musicGallery = document.getElementById('music-gallery');
+
+        addMusicButton.addEventListener('click', () => {
+          
+            if (document.getElementById('music-form')) return;
+
+        
+            const form = document.createElement('div');
+            form.id = 'music-form';
+            form.innerHTML = `
+                <input type="text" id="music-link" placeholder="Music Link" />
+                <input type="text" id="music-name" placeholder="Music Name" />
+                <button type="button" id="submit-music">Submit</button>
+                <button type="button" id="cancel-music">Cancel</button>
+            `;
+            document.body.appendChild(form);
+
+            const submitButton = form.querySelector('#submit-music');
+            const cancelButton = form.querySelector('#cancel-music');
+
+            submitButton.addEventListener('click', () => {
+                const musicLink = form.querySelector('#music-link').value.trim();
+                const musicName = form.querySelector('#music-name').value.trim();
+
+                if (musicLink && musicName) {
+             
+                    const musicItem = document.createElement('a');
+                    musicItem.href = musicLink;
+                    musicItem.target = '_blank';
+                    musicItem.innerHTML = `
+                        <img src="https://via.placeholder.com/100" alt="${musicName}" />
+                        <p>${musicName}</p>
+                    `;
+                    musicGallery.appendChild(musicItem);
+
+                    
+                    form.remove();
+                } else {
+                    alert('Please fill out all fields!');
+                }
+            });
+
+            cancelButton.addEventListener('click', () => {
+                form.remove(); 
+            });
+        });
+
+    </script> 
+</body>
+</html>
